@@ -74,7 +74,7 @@ private fun readNumber(current: Char, chars: ListIterator<Char>): String {
     return number
 }
 
-data class Identifier(val identifier: String, val tokenType: TokenType)
+private data class Identifier(val identifier: String, val tokenType: TokenType)
 
 private val keywords = mapOf(
     "true" to TokenType.True,

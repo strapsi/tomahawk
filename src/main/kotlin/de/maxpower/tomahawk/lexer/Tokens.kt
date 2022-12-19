@@ -26,6 +26,7 @@ enum class TokenType(val pretty: kotlin.String = "") {
     GreaterThan(">"),
     Colon(":"),
     Period("."),
+    Nothing("nothing")
 }
 
 data class Position(val line: Int, val start: Int, val end: Int)
@@ -46,6 +47,8 @@ class TokenList {
     }
 
     fun next(): Token? = if (tokenIterator.hasNext()) tokenIterator.next() else null
+    fun hasNext(): Boolean = tokenIterator.hasNext()
+    fun peek(): Token? = next().also { if (it != null) tokenIterator.previous() }
 
     override fun toString(): String {
         return tokens.joinToString("\n")
