@@ -1,15 +1,17 @@
-proc :: main { a: string, b: string |
-    return a + b
-}
-
-
 const PI := 3.14
 var radius := 1394.13
 
-# radius += true ? 10 : 1
-if (true) radius += 10
-else radius += 1
+fn foo : number { a: number | a * a }
 
-const area : number = { r |
-    return r * r * PI
+fn do : number {
+    a: fn(number): number,
+    num: number = 0 |
+
+    fn(num)
 }
+
+fn print : void { any: string |
+    println(any)
+}
+
+do(foo, 13)

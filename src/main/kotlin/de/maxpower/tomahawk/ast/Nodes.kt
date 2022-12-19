@@ -3,7 +3,6 @@ package de.maxpower.tomahawk.ast
 import de.maxpower.tomahawk.lexer.Position
 import de.maxpower.tomahawk.lexer.Token
 import de.maxpower.tomahawk.lexer.TokenType
-import org.springframework.aot.hint.annotation.RegisterReflectionForBinding
 
 interface Node {
     val token: Token
