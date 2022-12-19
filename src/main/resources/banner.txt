@@ -1,3 +1,2 @@
 tomahawk: 0.0.1
-write statemnts!
->
+type `exit` to exit :D

@@ -13,7 +13,7 @@ class EvaluatorKtTest {
     @Test
     fun `it should evaluate to nothing`() {
         val result = evaluate(parse(lex("")), null)
-        expectThat(result).isA<Objects.Object<Any?>>().and { get { value }.isNull() }
+        expectThat(result).isA<Objects.Nothing>()
     }
 
     @Test
