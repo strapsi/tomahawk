@@ -86,4 +86,16 @@ class ParserKtTest {
             }
         }
     }
+
+    @Test
+    fun `it should parse numbers with underscores`() {
+        val program = parse(lex("return 1_000"))
+        expectThat(program.statements.first()) {
+            isA<ReturnStatement>() and {
+                get { value }.isA<NumberLiteral>() and {
+                    get { value } isEqualTo 1000.0
+                }
+            }
+        }
+    }
 }
