@@ -6,7 +6,7 @@ import de.maxpower.tomahawk.lexer.TokenList
 import de.maxpower.tomahawk.lexer.TokenType
 
 
-typealias PrefixParseFunction = (token: Token) -> Expression
+typealias PrefixParseFunction = (token: Token, tokens: TokenList) -> Expression
 typealias InfixParseFunction = (token: Token, tokens: TokenList, other: Expression, precedence: Int) -> Expression
 
 object Precedence {
@@ -15,13 +15,14 @@ object Precedence {
     const val LessGreater = 2
     const val PlusMinus = 3
     const val MultiplyDivide = 4
-    const val Call = 5
+    const val Prefix = 5
+    const val Call = 6
 }
 
 fun parseExpression(token: Token?, tokens: TokenList, precedence: Int = Precedence.Lowest): Expression {
     if (token == null) throw RuntimeException("parseExpression on null")
     val prefixParserFn = prefixParser(token.type)
-    var leftExpression = prefixParserFn(token)
+    var leftExpression = prefixParserFn(token, tokens)
     while (tokens.peek() != null && precedence < precedence(tokens.peek())) {
         val infixParseFn = infixParser(tokens.peek()!!.type) ?: return leftExpression
         val next = tokens.next() ?: throw RuntimeException("expecting expression but got: null")
@@ -58,11 +59,11 @@ private fun precedence(token: Token?): Int {
     return precedences[token?.type ?: Precedence.Lowest] ?: Precedence.Lowest
 }
 
-private fun parseIdentifier(token: Token): Expression {
+private fun parseIdentifier(token: Token, tokens: TokenList): Expression {
     return Identifier(token, token.pretty)
 }
 
-private fun parseNumber(token: Token): Expression {
+private fun parseNumber(token: Token, tokens: TokenList): Expression {
     val number = token.pretty
         .replace("_", "")
         .toDoubleOrNull()
@@ -71,23 +72,28 @@ private fun parseNumber(token: Token): Expression {
     return NumberLiteral(token, number)
 }
 
-private fun parseBooleanExpression(token: Token): Expression {
+private fun parseBooleanExpression(token: Token, tokens: TokenList): Expression {
     return BooleanLiteral(token, token.type == TokenType.True)
 }
 
-//private fun parsePrefixExpression(token: Token, tokens: TokenList): Expression {
-//
-//}
+private fun parsePrefixExpression(token: Token, tokens: TokenList): Expression {
+    val expression = parseExpression(tokens.next(), tokens, Precedence.Prefix)
+    return PrefixExpression(token, expression)
+}
 
 private fun parseInfixExpression(token: Token, tokens: TokenList, left: Expression, precedence: Int): Expression {
     // check if it is != (not equals)
     // if so, wrap the expression in a !-PrefixExpression
-    val operator = if (token.type == TokenType.Bang) expect(tokens, TokenType.Equals)
-    else token
+    val operator = when (token.type) {
+        TokenType.Bang -> expect(tokens, TokenType.Equals)
+        else -> token
+    }
     val right = parseExpression(tokens.next(), tokens, precedence)
     val infix = InfixExpression(operator, left, right)
-    return if (token.type == TokenType.Bang) PrefixExpression(token, infix)
-    else infix
+    return when (token.type) {
+        TokenType.Bang -> PrefixExpression(token, infix)
+        else -> infix
+    }
 }
 
 private fun prefixParser(type: TokenType): PrefixParseFunction = when (type) {
@@ -95,6 +101,9 @@ private fun prefixParser(type: TokenType): PrefixParseFunction = when (type) {
     TokenType.Number -> ::parseNumber
     TokenType.True,
     TokenType.False -> ::parseBooleanExpression
+
+    TokenType.Bang,
+    TokenType.Minus -> ::parsePrefixExpression
 
     else -> TODO("$type not implemented")
 }

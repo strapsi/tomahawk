@@ -9,11 +9,13 @@ import org.springframework.boot.runApplication
 @SpringBootApplication
 class TomahawkApplication : CommandLineRunner {
     override fun run(vararg args: String?) {
-        println("kann das jetzt vllt sein. ${args.joinToString(",")}")
         var line = readln()
+        println("the line was $line")
         while (line != "exit") {
             val program = parse(lex(line))
-            program.statements.forEach(::println)
+            program.statements.forEach {
+                println(it)
+            }
             line = readln()
         }
     }

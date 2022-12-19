@@ -8,7 +8,6 @@ import de.maxpower.tomahawk.lexer.TokenType
 
 fun parse(tokens: TokenList): Program {
     val statements = mutableListOf<Statement>()
-    println(tokens)
     while (tokens.hasNext()) {
         val next = tokens.next()!!
         parseStatement(next, tokens).let(statements::add)

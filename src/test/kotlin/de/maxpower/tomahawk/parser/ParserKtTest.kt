@@ -111,4 +111,32 @@ class ParserKtTest {
             }
         }
     }
+
+    @Test
+    fun `it should parse prefix expressions`() {
+        val program = parse(
+            lex(
+                """
+            !true
+            return -10
+        """.trimIndent()
+            )
+        )
+        expectThat(program.statements.first()) {
+            isA<ExpressionStatement>() and {
+                get { expression }.isA<PrefixExpression>() and {
+                    get { token.type } isEqualTo TokenType.Bang
+                    get { value }.isA<BooleanLiteral>() and { get { value }.isTrue() }
+                }
+            }
+        }
+        expectThat(program.statements.last()) {
+            isA<ReturnStatement>() and {
+                get { value }.isA<PrefixExpression>() and {
+                    get { token.type } isEqualTo TokenType.Minus
+                    get { value }.isA<NumberLiteral>() and { get { value } isEqualTo 10.0 }
+                }
+            }
+        }
+    }
 }
