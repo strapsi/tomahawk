@@ -76,7 +76,17 @@ class ExpressionStatement(override val token: Token, val expression: Expression)
     override fun toString(): String = "($expression)"
 }
 
-class InfixExpression(override val token: Token, val left: Expression, val right: Expression): Expression {
+class PrefixExpression(override val token: Token, val value: Expression) : Expression {
+    override fun toString(): String {
+        return """
+            PrefixExpression:
+                token: $token
+                value: $value
+        """.trimIndent()
+    }
+}
+
+class InfixExpression(override val token: Token, val left: Expression, val right: Expression) : Expression {
     override fun toString(): String {
         return """
             InfixExpression:

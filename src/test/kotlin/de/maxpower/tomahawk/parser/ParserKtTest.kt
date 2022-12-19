@@ -6,10 +6,7 @@ import de.maxpower.tomahawk.lexer.lex
 import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.Test
 import strikt.api.expectThat
-import strikt.assertions.isA
-import strikt.assertions.isEqualTo
-import strikt.assertions.isNotNull
-import strikt.assertions.isTrue
+import strikt.assertions.*
 
 class ParserKtTest {
 
@@ -94,6 +91,22 @@ class ParserKtTest {
             isA<ReturnStatement>() and {
                 get { value }.isA<NumberLiteral>() and {
                     get { value } isEqualTo 1000.0
+                }
+            }
+        }
+    }
+
+    @Test
+    fun `it should parse not equals`() {
+        val program = parse(lex("true != false"))
+        expectThat(program.statements.first()) {
+            isA<ExpressionStatement>() and {
+                get { expression }.isA<PrefixExpression>() and {
+                    get { token.type } isEqualTo TokenType.Bang
+                    get { value }.isA<InfixExpression>() and {
+                        get { left }.isA<BooleanLiteral>() and { get { value }.isTrue() }
+                        get { right }.isA<BooleanLiteral>() and { get { value }.isFalse() }
+                    }
                 }
             }
         }

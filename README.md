@@ -8,5 +8,5 @@
 ```
 const x := y
 var y := 13 + x
-return true
+return true != false
 ```

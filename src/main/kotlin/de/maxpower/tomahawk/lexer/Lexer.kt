@@ -29,6 +29,7 @@ fun lex(source: String): TokenList {
                     current == '>' -> tokens.addToken(TokenType.GreaterThan, lineIndex + 1, charIndex, charIndex)
                     current == ':' -> tokens.addToken(TokenType.Colon, lineIndex + 1, charIndex, charIndex)
                     current == '.' -> tokens.addToken(TokenType.Period, lineIndex + 1, charIndex, charIndex)
+                    current == '!' -> tokens.addToken(TokenType.Bang, lineIndex + 1, charIndex, charIndex)
                     current == '\'' -> {
                         val read = readString(current, chars)
                         tokens.addToken(TokenType.String, lineIndex + 1, charIndex, charIndex + read.length, read)

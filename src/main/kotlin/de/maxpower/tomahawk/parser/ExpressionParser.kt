@@ -31,8 +31,20 @@ fun parseExpression(token: Token?, tokens: TokenList, precedence: Int = Preceden
     return leftExpression
 }
 
+// return the last expected token if the path matches
+// otherwise throw exception
+fun expect(tokens: TokenList, vararg type: TokenType): Token {
+    return type.foldIndexed(tokens.next()) { index, token, tokenType ->
+        if (token != null && token.type == tokenType)
+            if (index == type.lastIndex) token
+            else tokens.next()
+        else throw RuntimeException("expected ${tokenType.pretty} but got ${token?.pretty}")
+    } ?: throw RuntimeException("expected $")
+}
+
 private val precedences = mapOf(
     TokenType.Equals to Precedence.Equals,
+    TokenType.Bang to Precedence.Equals,
     TokenType.GreaterThan to Precedence.LessGreater,
     TokenType.LessThan to Precedence.LessGreater,
     TokenType.Plus to Precedence.PlusMinus,
@@ -45,7 +57,6 @@ private val precedences = mapOf(
 private fun precedence(token: Token?): Int {
     return precedences[token?.type ?: Precedence.Lowest] ?: Precedence.Lowest
 }
-
 
 private fun parseIdentifier(token: Token): Expression {
     return Identifier(token, token.pretty)
@@ -64,9 +75,19 @@ private fun parseBooleanExpression(token: Token): Expression {
     return BooleanLiteral(token, token.type == TokenType.True)
 }
 
+//private fun parsePrefixExpression(token: Token, tokens: TokenList): Expression {
+//
+//}
+
 private fun parseInfixExpression(token: Token, tokens: TokenList, left: Expression, precedence: Int): Expression {
+    // check if it is != (not equals)
+    // if so, wrap the expression in a !-PrefixExpression
+    val operator = if (token.type == TokenType.Bang) expect(tokens, TokenType.Equals)
+    else token
     val right = parseExpression(tokens.next(), tokens, precedence)
-    return InfixExpression(token, left, right)
+    val infix = InfixExpression(operator, left, right)
+    return if (token.type == TokenType.Bang) PrefixExpression(token, infix)
+    else infix
 }
 
 private fun prefixParser(type: TokenType): PrefixParseFunction = when (type) {
@@ -79,6 +100,8 @@ private fun prefixParser(type: TokenType): PrefixParseFunction = when (type) {
 }
 
 private fun infixParser(type: TokenType): InfixParseFunction? = when (type) {
+    TokenType.Equals,
+    TokenType.Bang,
     TokenType.Plus,
     TokenType.Minus,
     TokenType.Multiply,

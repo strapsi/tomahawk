@@ -11,6 +11,7 @@ enum class TokenType(val pretty: kotlin.String = "") {
     Return("return"),
     Pipe("|"),
     Equals("="),
+    Bang("!"),
     Comma(","),
     Plus("+"),
     Minus("-"),

@@ -19,7 +19,7 @@ class LexerTest {
 
     @Test
     fun `it should lex all single char special characters`() {
-        val tokens = lex(" | = , + - * / ( ) [ ] { } < > : .")
+        val tokens = lex(" | = , + - * / ( ) [ ] { } < > : . !")
         expect {
             that(tokens.next()) must { get(Token::type) isEqualTo TokenType.Pipe }
             that(tokens.next()) must { get(Token::type) isEqualTo TokenType.Equals }
@@ -38,6 +38,7 @@ class LexerTest {
             that(tokens.next()) must { get(Token::type) isEqualTo TokenType.GreaterThan }
             that(tokens.next()) must { get(Token::type) isEqualTo TokenType.Colon }
             that(tokens.next()) must { get(Token::type) isEqualTo TokenType.Period }
+            that(tokens.next()) must { get(Token::type) isEqualTo TokenType.Bang }
             that(tokens.next()).isNull()
         }
     }

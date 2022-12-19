@@ -59,13 +59,4 @@ private fun parseExpressionStatement(token: Token, tokens: TokenList): Statement
     return ExpressionStatement(token, expression)
 }
 
-// return the last expected token if the path matches
-// otherwise throw exception
-private fun expect(tokens: TokenList, vararg type: TokenType): Token {
-    return type.foldIndexed(tokens.next()) { index, token, tokenType ->
-        if (token != null && token.type == tokenType)
-            if (index == type.lastIndex) token
-            else tokens.next()
-        else throw RuntimeException("expected ${tokenType.pretty} but got ${token?.pretty}")
-    } ?: throw RuntimeException("expected $")
-}
+
