@@ -1,7 +1,14 @@
 package de.maxpower.tomahawk.lexer
 
-enum class TokenType(val pretty: String = "") {
+enum class TokenType(val pretty: kotlin.String = "") {
+    String,
+    Number,
     Identifier,
+    True("true"),
+    False("false"),
+    Const("const"),
+    Var("var"),
+    Return("return"),
     Pipe("|"),
     Equals("="),
     Comma(","),
@@ -9,8 +16,8 @@ enum class TokenType(val pretty: String = "") {
     Minus("-"),
     Multiply("*"),
     Divide("/"),
-    LeftBrace("("),
-    RightBrace(")"),
+    LeftParen("("),
+    RightParen(")"),
     LeftBracket("["),
     RightBracket("]"),
     LeftCurly("{"),
@@ -18,6 +25,7 @@ enum class TokenType(val pretty: String = "") {
     LessThan("<"),
     GreaterThan(">"),
     Colon(":"),
+    Period("."),
 }
 
 data class Position(val line: Int, val start: Int, val end: Int)
@@ -38,4 +46,8 @@ class TokenList {
     }
 
     fun next(): Token? = if (tokenIterator.hasNext()) tokenIterator.next() else null
+
+    override fun toString(): String {
+        return tokens.joinToString("\n")
+    }
 }
