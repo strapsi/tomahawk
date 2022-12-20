@@ -48,4 +48,42 @@ class EvaluatorKtTest {
         val result = evaluate(parse(lex("-13")), null)
         expectThat(result).isA<Objects.Number>() and { get { value } isEqualTo -13 }
     }
+
+    @Test
+    fun `it should evaluate 10 + 3`() {
+        val result = evaluate(parse(lex("10 + 3")), null)
+        expectThat(result).isA<Objects.Number>() and { get { value } isEqualTo 13 }
+    }
+
+
+    @Test
+    fun `it should evaluate -10 + 3`() {
+        val result = evaluate(parse(lex("-10 + 3")), null)
+        expectThat(result).isA<Objects.Number>() and { get { value } isEqualTo -7 }
+    }
+
+
+    @Test
+    fun `it should evaluate true = false`() {
+        val result = evaluate(parse(lex("true = false")), null)
+        expectThat(result).isA<Objects.Bool>() and { get { value }.isFalse() }
+    }
+
+    @Test
+    fun `it should evaluate true = !false`() {
+        val result = evaluate(parse(lex("true = !false")), null)
+        expectThat(result).isA<Objects.Bool>() and { get { value }.isTrue() }
+    }
+
+    @Test
+    fun `it should evaluate !true = !false`() {
+        val result = evaluate(parse(lex("!true = !false")), null)
+        expectThat(result).isA<Objects.Bool>() and { get { value }.isFalse() }
+    }
+
+    @Test
+    fun `it should evaluate !true != !false`() {
+        val result = evaluate(parse(lex("!true != !false")), null)
+        expectThat(result).isA<Objects.Bool>() and { get { value }.isTrue() }
+    }
 }
