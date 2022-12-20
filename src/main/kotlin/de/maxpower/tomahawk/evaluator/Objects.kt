@@ -24,7 +24,7 @@ object Objects {
         override fun inspect(): String = value.inspect()
     }
 
-    class Number(override val value: kotlin.Double) : Object<kotlin.Double> {
+    class Number(override val value: kotlin.Number) : Object<kotlin.Number> {
         override val type: ObjectType = ObjectType.Number
         override fun inspect(): String = value.toString()
     }

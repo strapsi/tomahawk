@@ -4,10 +4,7 @@ import de.maxpower.tomahawk.lexer.lex
 import de.maxpower.tomahawk.parser.parse
 import org.junit.jupiter.api.Test
 import strikt.api.expectThat
-import strikt.assertions.isA
-import strikt.assertions.isNotNull
-import strikt.assertions.isNull
-import strikt.assertions.isTrue
+import strikt.assertions.*
 
 class EvaluatorKtTest {
     @Test
@@ -20,5 +17,23 @@ class EvaluatorKtTest {
     fun `it should evaluate "return true"`() {
         val result = evaluate(parse(lex("return true")), null)
         expectThat(result).isA<Objects.Bool>().and { get { value }.isTrue() }
+    }
+
+    @Test
+    fun `it should evaluate a expression statement`() {
+        val result = evaluate(parse(lex("true")), null)
+        expectThat(result).isA<Objects.Bool>() and { get { value }.isTrue() }
+    }
+
+    @Test
+    fun `it should evaluate a "return 13"`() {
+        val result = evaluate(parse(lex("return 13")), null)
+        expectThat(result).isA<Objects.Number>() and { get { value } isEqualTo 13 }
+    }
+
+    @Test
+    fun `it should evaluate a "return 13,0" (with a dot)`() {
+        val result = evaluate(parse(lex("return 13.0")), null)
+        expectThat(result).isA<Objects.Number>() and { get { value } isEqualTo 13.0 }
     }
 }

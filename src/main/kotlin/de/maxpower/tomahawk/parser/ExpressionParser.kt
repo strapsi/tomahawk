@@ -66,7 +66,10 @@ private fun parseIdentifier(token: Token, tokens: TokenList): Expression {
 private fun parseNumber(token: Token, tokens: TokenList): Expression {
     val number = token.pretty
         .replace("_", "")
-        .toDoubleOrNull()
+        .let {
+            if (it.indexOf(".") > -1) it.toDoubleOrNull()
+            else it.toIntOrNull()
+        }
         ?: throw RuntimeException("could not parse value <${token.pretty}> as a number")
 
     return NumberLiteral(token, number)

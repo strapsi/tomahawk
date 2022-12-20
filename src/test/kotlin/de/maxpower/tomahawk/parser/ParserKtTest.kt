@@ -61,7 +61,7 @@ class ParserKtTest {
 
     @Test
     fun `it should parse a number expression`() {
-        val program = parse(lex("return 13"))
+        val program = parse(lex("return 13.0"))
         expectThat(program.statements.first()) {
             isA<ReturnStatement>() and {
                 get { token.type } isEqualTo TokenType.Return
@@ -86,7 +86,7 @@ class ParserKtTest {
 
     @Test
     fun `it should parse numbers with underscores`() {
-        val program = parse(lex("return 1_000"))
+        val program = parse(lex("return 1_000.0"))
         expectThat(program.statements.first()) {
             isA<ReturnStatement>() and {
                 get { value }.isA<NumberLiteral>() and {
@@ -134,7 +134,7 @@ class ParserKtTest {
             isA<ReturnStatement>() and {
                 get { value }.isA<PrefixExpression>() and {
                     get { token.type } isEqualTo TokenType.Minus
-                    get { value }.isA<NumberLiteral>() and { get { value } isEqualTo 10.0 }
+                    get { value }.isA<NumberLiteral>() and { get { value } isEqualTo 10 }
                 }
             }
         }

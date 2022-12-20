@@ -7,11 +7,19 @@ fn do : number {
     a: fn(number): number,
     num: number = 0 |
 
-    fn(num)
+    a(num)
 }
 
 fn print : void { any: string |
     println(any)
 }
 
+fn factoryFun : fn(num: number) : number { t: number |
+   return { num: number |
+    return num * t
+   }
+}
+
+const timesTen := factoryFun(10)
+timesTen(13)
 do(foo, 13)

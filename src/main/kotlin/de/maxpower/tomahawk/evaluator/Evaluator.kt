@@ -10,6 +10,8 @@ fun evaluate(node: Node, env: Env): Objects.Object<*> {
     return when (node) {
         is Program -> evaluateProgram(node, env)
         is ReturnStatement -> evaluate(node.value, null).let(Objects::ReturnValue)
+        is ExpressionStatement -> evaluate(node.expression, null)
+        is NumberLiteral -> Objects.Number(node.value)
         is BooleanLiteral -> Objects.Bool(node.value)
         else -> throw RuntimeException("${node::class.simpleName} not implemented")
     }
