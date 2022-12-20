@@ -108,7 +108,7 @@ private fun prefixParser(type: TokenType): PrefixParseFunction = when (type) {
     TokenType.Bang,
     TokenType.Minus -> ::parsePrefixExpression
 
-    else -> TODO("$type not implemented")
+    else -> throw RuntimeException("parsing of prefix expression <$type> is not implemented")
 }
 
 private fun infixParser(type: TokenType): InfixParseFunction? = when (type) {
@@ -119,5 +119,5 @@ private fun infixParser(type: TokenType): InfixParseFunction? = when (type) {
     TokenType.Multiply,
     TokenType.Divide -> ::parseInfixExpression
 
-    else -> TODO("$type not implemented")
+    else -> throw RuntimeException("parsing of infix expression <$type> is not implemented")
 }

@@ -9,7 +9,6 @@ import kotlin.math.exp
 // TODO: implement env
 typealias Env = Any?
 
-// TODO: handle errors
 fun evaluate(node: Node, env: Env): Objects.Object<Any?> {
     return when (node) {
         is Program -> evaluateProgram(node, env)
@@ -18,7 +17,8 @@ fun evaluate(node: Node, env: Env): Objects.Object<Any?> {
         is PrefixExpression -> evaluatePrefixExpression(node).errorOr
         is NumberLiteral -> Objects.Number(node.value)
         is BooleanLiteral -> Objects.Bool(node.value)
-        else -> throw RuntimeException("${node::class.simpleName} not implemented")
+//        else -> throw RuntimeException("${node::class.simpleName} not implemented")
+        else -> Objects.Error("${node::class.simpleName} not implemented")
     }
 }
 
@@ -53,7 +53,7 @@ private fun evaluateMinusPrefixExpression(expression: Expression): Objects.Error
             is Double -> Objects.Number(-value.value.toDouble())
             else -> Objects.Error("operation `-${value.value}` not allowed on numbers of type ${value.value::class.simpleName}")
         }
-
+        is Objects.Error -> value
         else -> Objects.Error("operation `-${value.value}` not allowed. value must be of type number")
     }.let(Objects::ErrorOr)
 }

@@ -23,3 +23,6 @@ fn factoryFun : fn(num: number) : number { t: number |
 const timesTen := factoryFun(10)
 timesTen(13)
 do(foo, 13)
+
+
+// compile to JS?

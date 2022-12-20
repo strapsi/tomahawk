@@ -57,7 +57,7 @@ fun lex(source: String): TokenList {
 }
 
 private fun readString(current: Char, chars: ListIterator<Char>): String {
-    TODO("implement strings")
+    throw RuntimeException("Strings are not implemented yet")
 }
 
 private fun readNumber(current: Char, chars: ListIterator<Char>): String {

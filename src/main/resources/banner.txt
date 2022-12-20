@@ -1,2 +1,2 @@
 tomahawk: 0.0.1
-type `exit` to exit :D
+type `exit` or `.e` to exit :D
