@@ -36,4 +36,16 @@ class EvaluatorKtTest {
         val result = evaluate(parse(lex("return 13.0")), null)
         expectThat(result).isA<Objects.Number>() and { get { value } isEqualTo 13.0 }
     }
+
+    @Test
+    fun `it should evaluate a "!true"`() {
+        val result = evaluate(parse(lex("!true")), null)
+        expectThat(result).isA<Objects.Bool>() and { get { value }.isFalse() }
+    }
+
+    @Test
+    fun `it should evaluate a "-13"`() {
+        val result = evaluate(parse(lex("-13")), null)
+        expectThat(result).isA<Objects.Number>() and { get { value } isEqualTo -13 }
+    }
 }
